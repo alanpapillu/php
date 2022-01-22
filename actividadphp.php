@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Smart TV 55"</td>
+                            <td colspan="2">Smart TV 55"</td>
                             <td>Hitachi</td>
                             <td>555csd56</td>
                             <td>Hay Stock</td>
