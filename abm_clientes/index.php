@@ -1,5 +1,6 @@
 <?php
-ini_set('display error', 1);
+
+ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
@@ -64,14 +65,14 @@ if($_POST){
         
     } else {
         //sino imagen es vacío
-        if($id >=0){
-        $imagen = $aClientes[$id]["imagen"];
+        if($id >= 0){
+            $imagen = $aClientes[$id]["imagen"];
     }   else{
             $imagen = "";
         }
     }
 
-    //crear un array con todos los datos.
+    //crear un array con todos los datos
     if($id >= 0){
         $aClientes[$id] = array("dni" => $dni,
                         "nombre" => $nombre,
@@ -96,13 +97,21 @@ if($_POST){
     
 }
 
+
+
+if ($_POST) {
+    if (isset($_REQUEST['btnGuardar'])) {
+        $nombre = trim($_REQUEST['txtNombre']);
+        if (isset($nombre, $dni, $correo)) {
+
+            $aMensaje = array("texto" => "¡$nombre guardado correctamente!", 
+                              "estado" => "success");
+        } 
+    } 
+}
+
+
 ?>
-
-
-
-
-
-
 
 
 <!DOCTYPE html>
@@ -114,7 +123,6 @@ if($_POST){
     <title>ABM Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/13c117d460.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
     <main class="container">
@@ -123,9 +131,16 @@ if($_POST){
                 <h1>Registro de clientes</h1>
             </div>
         </div>
+        <?php if(isset($aMensaje)): ?>
+        <div class="col-12">
+            <div class="alert alert-<?php echo $aMensaje["estado"]; ?>" role="alert">
+                <?php echo $aMensaje["texto"]; ?>
+            </div>
+        </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-6">
-                <form action="" method="post" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <div>
                         <label for="">DNI:*</label>
                         <input type="text" name="txtDni" id="txtDni" class="form-control" required value="<?php echo isset($aClientes[$id]["dni"])? $aClientes[$id]["dni"] : ""; ?>">
@@ -148,14 +163,15 @@ if($_POST){
                         <small class="d-block">Archivos admitidos: .jpg, .jpeg, .png</small>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" name="btnGuardar" class="btn btn-primary">Guardar</button>
+                        <a href="index.php" class="btn btn-danger my-2">NUEVO</a>
                     </div>
                 </form>
             </div>
             <div class="col-6">
                 <table class="table table-hover border">
                     <tr>
-                        <th>Imágen</th>
+                        <th>Imagen</th>
                         <th>DNI</th>
                         <th>Nombre</th>
                         <th>Correo</th>
@@ -163,15 +179,15 @@ if($_POST){
                     </tr>
                     <?php foreach($aClientes as $pos => $cliente): ?>
                         <tr>
-                        <td><img src="imagen/<?php echo $cliente["imagen"]; ?>" class="img-thumbnail"> </td>
-                        <td><?php echo $cliente["dni"]; ?></td>
-                        <td><?php echo $cliente["nombre"]; ?></td>
-                        <td><?php echo $cliente["correo"]; ?></td>
-                        <td>
-                            <a href="?id=<?php echo $pos; ?>"><i class="fas fa-edit"></i></a>
-                            <a href="?id=<?php echo $pos; ?>&do=eliminar"><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                        
+                            <td><img src="imagenes/<?php echo $cliente["imagen"]; ?>" class="img-thumbnail"></td>
+                            <td><?php echo $cliente["dni"]; ?></td>
+                            <td><?php echo $cliente["nombre"]; ?></td>
+                            <td><?php echo $cliente["correo"]; ?></td>
+                            <td>
+                                <a href="?id=<?php echo $pos; ?>"><i class="fas fa-edit"></i></a>
+                                <a href="?id=<?php echo $pos; ?>&do=eliminar" name="accionEliminar"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                            
                         </tr>
                     <?php endforeach; ?>
                 </table>
