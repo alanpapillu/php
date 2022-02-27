@@ -3,15 +3,26 @@
 include_once("config.php");
 include_once("entidades/tipoproducto.php");
 
-    if($_POST){
-        if(isset($_REQUEST["btnGuardar"])){
+$tipoProducto = new TipoProducto();
+$tipoProducto->cargarFormulario($_REQUEST);
 
-            $tipoProducto = new TipoProducto();
-            $tipoProducto->cargarFormulario($_REQUEST);
+if($_POST){
+    if(isset($_REQUEST["btnGuardar"])){
+        if(isset($_REQUEST["id"])){
+            $tipoProducto->actualizar();
+        } else {
             $tipoProducto->insertar();
+        }
 
-        } else if (isset($_REQUEST["btnBorrar"]));
-    }
+    } else if (isset($_REQUEST["btnBorrar"])){
+        $tipoProducto->eliminar();
+        header("Location: tipoproducto-listado.php");   
+    } 
+} else if(isset($_REQUEST["id"])){
+    $tipoProducto->obtenerPorId();
+
+}
+
 
 
 
@@ -35,7 +46,7 @@ include_once("header.php");
           <div class="row">
               <div class="col-12 form-group">
                   <label for="txtNombre">Nombre:</label>
-                  <input type="text" required="" class="form-control" name="txtNombre" id="txtNombre"> 
+                  <input type="text" required="" class="form-control" name="txtNombre" id="txtNombre" value="<?php echo $tipoProducto->nombre; ?> "> 
 
               </div>
 
